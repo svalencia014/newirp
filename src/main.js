@@ -1,39 +1,56 @@
-const audio = document.querySelector('#stream');
 const playPauseButton = document.querySelector('[name="play-pause"]');
-const playPauseButtonIcon = playPauseButton.querySelector('i');
 const volumeControl = document.querySelector('[name="volume"]');
 const currentlyPlaying = document.querySelector('.currently-playing-title');
 const volumeButton = document.querySelector('[name="mute"]');
 const volumeButtonIcon = volumeButton.querySelector('i');
+const albumCoverElement = document.querySelector('#album-cover')
 
 let isPlaying = false;
-let fetchInterval = null;
 let currentVolume = 1;
 
-audio.volume = currentVolume;
-
-async function getNowPlaying() {
-  console.log("getting now playing");
-  let request = await fetch('https://ice64.securenetsystems.net/WTTS', {
-		headers: {
-			"Icy-Metadata": "1"
-		},
-    mode: 'no-cors'
-	});
-  console.log("recieved response")
-}
-
+const animation = lottie.loadAnimation({
+  container: playPauseButton,
+  path: 'https://maxst.icons8.com/vue-static/landings/animated-icons/icons/pause/pause.json',
+  renderer: 'svg',
+  loop: false,
+  autoplay: false,
+  name: "Demo Animation",
+});
+animation.goToAndStop(14, true);
+setupLastfm();
+const player = new IcecastMetadataPlayer("https://corsproxy.io/?https%3A%2F%2Fice64.securenetsystems.net%2FWTTS", {
+  onMetadata: async (metadata) => {
+    console.log(`"${metadata.StreamTitle}"`) 
+    currentlyPlaying.innerText = metadata.StreamTitle;
+    const [artist, album] = metadata.StreamTitle.split(" - ");
+    let albumCover = await getAlbumCover(album, artist);
+    albumCoverElement.setAttribute("src", albumCover)
+    console.log(albumCover);
+  },
+  metadataTypes: ["icy"]
+})
 playPauseButton.addEventListener('click', () => {
   if (isPlaying) {
-    audio.pause();
-    playPauseButtonIcon.classList.remove('fa-pause');
-    playPauseButtonIcon.classList.add('fa-play');
-    clearInterval(fetchInterval);
+    animation.playSegments([0, 14], true);
+    player.stop();
   } else {
-    audio.play();
-    playPauseButtonIcon.classList.remove('fa-play');
-    playPauseButtonIcon.classList.add('fa-pause');
-    fetchInterval = setInterval(getNowPlaying, 5 * 1000); //every 5 seconds
+    animation.playSegments([14, 27], true)
+    player.play();
   }
   isPlaying = !isPlaying;
 })
+async function getAlbumCover(song, artist = "") {
+  let response = await fetch(`http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=471768afa0e8702597d45964b3035b55&artist=${artist}&track=${song}&format=json`)
+  let data = await response.json();
+  if (data.error == 6) {
+    return "https://pbs.twimg.com/profile_images/900115872567631872/a2TttW0m_400x400.jpg";
+  }
+  response = await fetch(`http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=471768afa0e8702597d45964b3035b55&artist=${artist}&album=${data.track.album.title}&format=json`)
+  data = await response.json();
+  return (data.album.image[4])["#text"];
+}
+async function setupLastfm() {
+  let response = await fetch(`http://ws.audioscrobbler.com/2.0/?method=auth.gettoken&api_key=471768afa0e8702597d45964b3035b55&format=json`);
+  let data = await response.json();
+  console.log(data);
+}

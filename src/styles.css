@@ -30,12 +30,18 @@ button {
   background-color: #0f0f0f;
   color: #ffffff;
   border-radius: 100%;
+  outline: none;
+  width: 20px;
+  height: 20px;
 }
 .play-pause-button {
   width: 70px;
   height: 70px;
   font-size: 25px;
-  margin-right: 24px;
+  margin: 20px 2.5% 20px 2.5%;
+}
+path {
+  stroke: #007db5;
 }
 .mute-button {
   width: 30px;
@@ -84,4 +90,8 @@ input[type="range"]::-ms-thumb {
 input[type="range"]:focus {
   border-radius: 50px;
   box-shadow: 0 0 15px -4px #F59E0B;
+}
+img {
+  display: flex;
+  flex-direction: column;
 }
