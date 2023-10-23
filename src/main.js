@@ -52,5 +52,16 @@ async function getAlbumCover(song, artist = "") {
 async function setupLastfm() {
   let response = await fetch(`http://ws.audioscrobbler.com/2.0/?method=auth.gettoken&api_key=471768afa0e8702597d45964b3035b55&format=json`);
   let data = await response.json();
-  console.log(data);
+  if (window.localStorage.getItem("last.fm") == null) {
+    window.open('https://www.last.fm/api/auth/?api_key=471768afa0e8702597d45964b3035b55&token=' + data.token, '_blank', )
+    window.localStorage.setItem("last.fm", data.token)
+  }
+  let apisig = md5(`api_key471768afa0e8702597d45964b3035b55methodauth.getSessiontoken${data.token}d13f3e935acd7834438c97523db81caa`)
+  response = await fetch(`http://ws.audioscrobbler.com/2.0/?method=auth.getsession&api_key=471768afa0e8702597d45964b3035b55&token=${data.token}&format=json`);
+  data = await response.json();
+  console.log(data.token);
+}
+
+async function handleAuth() {
+
 }
