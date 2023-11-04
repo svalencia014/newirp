@@ -24,7 +24,7 @@ const animation = lottie.loadAnimation({
 });
 animation.goToAndStop(14, true);
 const player = new IcecastMetadataPlayer("https://corsproxy.io/?https%3A%2F%2Fice64.securenetsystems.net%2FWTTS", {
-  audioElement: audioPlayer,
+  audioElement: audioPlaye,
   onMetadata: async (metadata) => {
     console.log(`"${metadata.StreamTitle}"`) 
     currentlyPlaying.innerText = metadata.StreamTitle;
