@@ -92,6 +92,6 @@ input[type="range"]:focus {
   box-shadow: 0 0 15px -4px #F59E0B;
 }
 img {
-  display: flex;
-  flex-direction: column;
+  float: left;
+  padding-right: 15px;
 }

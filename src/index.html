@@ -10,8 +10,10 @@
   </head>
   <body>
     <div class="radio-player">
+      <audio class="hidden" id="stream"></audio>
       <div class="player-controls">
         <button name="play-pause" id="play-button" class="play-pause-button" aria-label="Play/Pause"></button>
+        <img src="https://pbs.twimg.com/profile_images/900115872567631872/a2TttW0m_400x400.jpg" alt="album cover" id="album-cover" width="100" height="100"/>
         <div class="volume-and-title">
           <div class="album">
           </div>
@@ -23,13 +25,11 @@
             <button name="mute" class="mute-button" aria-label="Mute/Unmute">
               <i class="fas fa-volume-down" aria-hidden></i>
             </button>
-            <input type="range" name="volume" class="volume" min="0" max="1" step="0.05" value="0.2" aria-label="Volume" id="volume">
+            <input type="range" name="volume" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume" id="volume">
           </div>
-          <img src="https://pbs.twimg.com/profile_images/900115872567631872/a2TttW0m_400x400.jpg" alt="album cover" id="album-cover" width="100" height="100"/>
         </div>
       </div>
     </div>
-    <script src="https://unpkg.com/md5@2.3.0/md5.js"></script>
     <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.js"></script>
     <script src="https://unpkg.com/icecast-metadata-player@1.17.0/build/icecast-metadata-player-1.17.0.main.min.js"></script>
     <script src="main.js"></script>
